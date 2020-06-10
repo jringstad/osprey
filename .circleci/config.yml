@@ -36,6 +36,9 @@ workflows:
   build-and-publish-diagnostics:
     jobs:
       - build
+  release:
+    jobs:
+      - build
       - publish-github-release:
           requires:
             - build
