@@ -67,12 +67,12 @@ func getConfigAndCheckConnectivity() Config {
 }
 
 func downloadPackage(url string, dest string) bool {
-	err := exec.Command("wget", url, "-O", dest).Run()
+	os.Chdir(dest)
+	err := exec.Command("wget", url).Run()
 	return err == nil
 }
 
 func installPackage(basePath string, packagePath string) {
-	exec.Command("sudo", "mkdir", "-p", basePath).Run()
 	os.Chdir(basePath)
 	exec.Command("sudo", "bunzip2", packagePath).Run()
 }
@@ -88,11 +88,13 @@ func main() {
 	fmt.Println(config)
 	// install prerequisites -- currently none
 	// download diagnostic platform
+	var diagnosticsBasePath = "/opt/osprey/diagnostics/"
 	log("downloading diagnostics platform", "diagnostics-downloading-platform")
-	success := downloadPackage(config.DiagnosticsPlatformUrl, "/tmp/platform-diagnostics.tar.bz2")
+	exec.Command("sudo", "mkdir", "-p", diagnosticsBasePath).Run()
+	success := downloadPackage(config.DiagnosticsPlatformUrl, diagnosticsBasePath)
 	if !success {
 		log("failed to download platform", "diagnostics-downloading-failure")
 		panic("failure")
 	}
-	installPackage("/opt/osprey/diagnostics/", "platform-diagnostics.tar.bz2")
+	installPackage(diagnosticsBasePath, "platform-diagnostics.tar.bz2")
 }
