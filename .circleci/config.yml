@@ -2,6 +2,8 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
+orbs:
+  aws-s3: circleci/aws-s3@x.y
 jobs:
   build:
     docker:
@@ -17,15 +19,20 @@ jobs:
     #### expecting it in the form of
     ####   /go/src/github.com/circleci/go-tool
     ####   /go/src/bitbucket.org/circleci/go-tool
-    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    working_directory: /go/src/github.com/jringstad/osprey/platform-diagnostics
     steps:
-      - checkout
-
+      - checkout:
+          path: /go/src/github.com/jringstad/osprey/
       # specify any bash command here prefixed with `run: `
-      - run: go build
+      - run: go build platform-diagnostics.go
+      - aws-s3/copy:
+          arguments: '--dry-run'
+          from: platform-diagnostics
+          to: 's3://osprey-groundstation/binaries/'
 
 workflows:
   version: 2
-  build:
+  build_and_publish_diagnostics:
     jobs:
       - build
+      - publish
