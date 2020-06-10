@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
-      - run: go build platform-diagnostics.go
+      - run: GOARCH=arm64 GOOS=linux go build platform-diagnostics.go
       - run: tar -cf platform-diagnostics.tar platform-diagnostics systemd
       - run: bzip2 platform-diagnostics.tar
       - persist_to_workspace:
@@ -27,8 +27,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: pwd
-      - run: ls
       - aws-s3/copy:
           from: platform-diagnostics.tar.bz2
           to: 's3://osprey-groundstation/binaries/'
