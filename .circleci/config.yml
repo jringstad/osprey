@@ -23,7 +23,6 @@ jobs:
       - image: circleci/golang:1.9
     working_directory: /tmp/workspace/
     steps:
-      - run: mkdir /tmp/workspace
       - attach_workspace:
           at: /tmp/workspace
       - run: pwd
