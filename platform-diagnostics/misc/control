@@ -2,7 +2,7 @@ Package: osprey-diagnostics
 Version: 0.0.1
 Section: base
 Priority: optional
-Architecture: arm
+Architecture: armhf
 Depends:
 Maintainer: Your Name <you@email.com>
 Description: telemetry and other diagnostics
