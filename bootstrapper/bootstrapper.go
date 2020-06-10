@@ -1,4 +1,4 @@
-package bootstrapper
+package main
 
 import (
 	"os/exec"
