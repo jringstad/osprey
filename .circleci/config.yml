@@ -32,6 +32,8 @@ jobs:
       - aws-s3/copy:
           from: platform-diagnostics.tar.bz2
           to: 's3://osprey-groundstation/binaries/'
+          arguments: |
+            --acl public-read
 
 workflows:
   version: 2
