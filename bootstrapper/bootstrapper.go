@@ -49,6 +49,8 @@ func getConfigAndCheckConnectivity() interface{} {
 		log("failed to establish uplink (failed to parse)", "uplink-failed")
 		panic("failed to establish uplink")
 	}
+	// TODO: detect actual uplink type here
+	log("uplink success", "uplink-cellular")
 	return response
 }
 
