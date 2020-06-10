@@ -26,7 +26,6 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go build platform-diagnostics.go
       - aws-s3/copy:
-          arguments: '--dry-run'
           from: platform-diagnostics
           to: 's3://osprey-groundstation/binaries/'
 
