@@ -74,7 +74,34 @@ func downloadPackage(url string, dest string) bool {
 
 func installPackage(basePath string, packagePath string) {
 	os.Chdir(basePath)
-	exec.Command("sudo", "tar", "-xf", packagePath).Run()
+	err := exec.Command("sudo", "tar", "-xf", packagePath).Run()
+	if err != nil {
+		log("failed to extract platform", "diagnostics-failed")
+		panic("failure")
+	}
+	err = exec.Command("sudo", "cp", "systemd/*", "/etc/systemd/system/").Run()
+	if err != nil {
+		log("failed to extract platform", "diagnostics-failed")
+		panic("failure")
+	}
+}
+
+func enableAndStartService(serviceName string) {
+	err := exec.Command("sudo", "systemctl", "daemon-reload").Run()
+	if err != nil {
+		log("failed to reload daemons", "diagnostics-failed")
+		panic("failure")
+	}
+	err = exec.Command("sudo", "systemctl", "enable", serviceName).Run()
+	if err != nil {
+		log("failed to enable service", "diagnostics-failed")
+		panic("failure")
+	}
+	err = exec.Command("sudo", "systemctl", "start", serviceName).Run()
+	if err != nil {
+		log("failed to start service", "diagnostics-failed")
+		panic("failure")
+	}
 }
 
 type Config struct {
@@ -97,4 +124,6 @@ func main() {
 		panic("failure")
 	}
 	installPackage(diagnosticsBasePath, "platform-diagnostics.tar.bz2")
+	enableAndStartService("osprey-diagnostics.timer")
+	enableAndStartService("osprey-diagnostics.service")
 }
