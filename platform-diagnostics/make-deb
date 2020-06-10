@@ -5,9 +5,7 @@ cp platform-diagnostics osprey-diagnostics-0.0.1/usr/local/bin
 
 mkdir -p osprey-diagnostics-0.0.1/DEBIAN/
 cp misc/control osprey-diagnostics-0.0.1/DEBIAN/
-
-mkdir -p osprey-diagnostics-0.0.1/etc/systemd/system/
-cp misc/osprey-diagnostics.service osprey-diagnostics-0.0.1/etc/systemd/system/
-cp misc/osprey-diagnostics.timer osprey-diagnostics-0.0.1/etc/systemd/system/
+cp misc/osprey-diagnostics.service osprey-diagnostics-0.0.1/DEBIAN/
+cp misc/osprey-diagnostics.timer osprey-diagnostics-0.0.1/DEBIAN/
 
 dpkg-deb --build osprey-diagnostics-0.0.1
