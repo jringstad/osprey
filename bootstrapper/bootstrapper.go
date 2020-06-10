@@ -68,7 +68,7 @@ func getConfigAndCheckConnectivity() Config {
 
 func downloadPackage(url string, dest string) bool {
 	os.Chdir(dest)
-	err := exec.Command("wget", url).Run()
+	err := exec.Command("sudo", "wget", url).Run()
 	return err == nil
 }
 
