@@ -1,0 +1,10 @@
+[Unit]
+Description=Osprey diagnostics platform timer
+
+[Timer]
+Unit=osprey-diagnostics.service
+OnCalendar=*:*:0/5
+AccuracySec=1s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+[Unit]
+Description=Osprey diagnostics platform
+
+[Service]
+Type=oneshot
+ExecStart=/opt/osprey/diagnostics/platform-diagnostics
+User=pi

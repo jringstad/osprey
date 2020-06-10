@@ -3,10 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"os/exec"
 	"strings"
 )
@@ -68,12 +66,7 @@ func getConfigAndCheckConnectivity() Config {
 }
 
 func downloadPackage(url string, name string) {
-	fmt.Println(url)
-	out, _ := os.Create(name)
-	defer out.Close()
-	resp, _ := http.Get(url)
-	defer resp.Body.Close()
-	io.Copy(out, resp.Body)
+	exec.Command("wget", url, "-o", name).Run()
 }
 
 type Config struct {
