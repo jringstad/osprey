@@ -7,24 +7,20 @@ orbs:
 jobs:
   build:
     docker:
-      # specify the version
       - image: circleci/golang:1.9
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: /go/src/github.com/jringstad/osprey/platform-diagnostics
     steps:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
-      # specify any bash command here prefixed with `run: `
       - run: go build platform-diagnostics.go
+
+  publish-github-release:
+    docker:
+      - image: circleci/golang:1.9
+    working_directory: /go/src/github.com/jringstad/osprey/platform-diagnostics
+    steps:
+      - checkout:
+          path: /go/src/github.com/jringstad/osprey/
       - aws-s3/copy:
           from: platform-diagnostics
           to: 's3://osprey-groundstation/binaries/'
@@ -34,3 +30,11 @@ workflows:
   build_and_publish_diagnostics:
     jobs:
       - build
+      - publish-github-release:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              only: master

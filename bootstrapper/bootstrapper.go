@@ -37,8 +37,6 @@ func isInterfaceUp(networkInterface string) bool {
 	return err == nil
 }
 
-// ifconfig eth1 | grep "RUNNING"
-// ifconfig eth0 | grep "RUNNING"
 func getConfigAndCheckConnectivity() interface{} {
 	log("bootstrapper testing uplink", "uplink-test")
 	resp, err := http.Get(BootstrapperConfigFile)
@@ -70,5 +68,7 @@ func getConfigAndCheckConnectivity() interface{} {
 func main() {
 	log("bootstrapper initializing", "initializing")
 	var config = getConfigAndCheckConnectivity()
-	fmt.Println(config)
+	// install prerequisites -- currently none
+	// download diagnostic platform
+
 }
