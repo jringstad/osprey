@@ -1,1 +1,4 @@
 .idea/
+bootstrapper/bootstrapper
+platform-diagnostics/platform-diagnostics
+platform-diagnostics/telemetry

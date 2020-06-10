@@ -31,6 +31,14 @@ func runCommand(command string) string {
 func log(message string, soundName string) {
 	exec.Command("aplay", "sounds/" + soundName + ".wav").Run()
 }
+
+func isInterfaceUp(networkInterface string) bool {
+	err := exec.Command("bash", "-c", "ifconfig " + networkInterface + " | grep \"RUNNING\"").Run()
+	return err == nil
+}
+
+// ifconfig eth1 | grep "RUNNING"
+// ifconfig eth0 | grep "RUNNING"
 func getConfigAndCheckConnectivity() interface{} {
 	log("bootstrapper testing uplink", "uplink-test")
 	resp, err := http.Get(BootstrapperConfigFile)
@@ -49,8 +57,13 @@ func getConfigAndCheckConnectivity() interface{} {
 		log("failed to establish uplink (failed to parse)", "uplink-failed")
 		panic("failed to establish uplink")
 	}
-	// TODO: detect actual uplink type here
-	log("uplink success", "uplink-cellular")
+
+	if isInterfaceUp("eth0") {
+		log("uplink success (wired)", "uplink-wired")
+	} else {
+		// assuming cellular
+		log("uplink success (success)", "uplink-cellular")
+	}
 	return response
 }
 
