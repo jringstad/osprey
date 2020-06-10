@@ -13,17 +13,18 @@ jobs:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
       - run: go build platform-diagnostics.go
-      - store_artifacts:
-          path: platform-diagnostics
-          destination: artifact-file
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - platform-diagnostics
 
   publish-github-release:
     docker:
       - image: circleci/golang:1.9
-    working_directory: ~/artifacts/
+    working_directory: /tmp/artifacts/
     steps:
       - attach_workspace:
-          at: ~/artifacts/
+          at: /tmp/artifacts/
       - run: pwd
       - run: ls
       - aws-s3/copy:
