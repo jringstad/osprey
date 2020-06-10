@@ -66,8 +66,9 @@ func getConfigAndCheckConnectivity() Config {
 	return response
 }
 
-func downloadPackage(url string, dest string) {
-	exec.Command("wget", url, "-O", dest).Run()
+func downloadPackage(url string, dest string) bool {
+	err := exec.Command("wget", url, "-O", dest).Run()
+	return err == nil
 }
 
 func installPackage(basePath string, packagePath string) {
@@ -87,6 +88,11 @@ func main() {
 	fmt.Println(config)
 	// install prerequisites -- currently none
 	// download diagnostic platform
-	downloadPackage(config.DiagnosticsPlatformUrl, "/tmp/platform-diagnostics.tar.bz2")
+	log("downloading diagnostics platform", "diagnostics-downloading-platform")
+	success := downloadPackage(config.DiagnosticsPlatformUrl, "/tmp/platform-diagnostics.tar.bz2")
+	if !success {
+		log("failed to download platform", "diagnostics-downloading-failure")
+		panic("failure")
+	}
 	installPackage("/opt/osprey/diagnostics/", "platform-diagnostics.tar.bz2")
 }

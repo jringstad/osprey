@@ -25,8 +25,8 @@ generate_bootstrapper "failed" generic-failure
 generate_bootstrapper "succeeded" generic-success
 generate_bootstrapper "downloading platform" downloading-platform
 generate_bootstrapper "failed downloading platform release" downloading-failure
-generate_bootstrapper "downloading diagnostics platform" downloading-platform
-generate_bootstrapper "failed downloading diagnostics platform release" downloading-failure
+generate_bootstrapper "downloading diagnostics platform" diagnostics-downloading-platform
+generate_bootstrapper "failed downloading diagnostics platform release" diagnostics-downloading-failure
 generate_bootstrapper "acquiring initial configuration" configuration
 generate_bootstrapper "failed to acquire initial configuration" configuration-failure
 generate_bootstrapper "initializing platform diagnostics" diagnostics-initializing
