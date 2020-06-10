@@ -33,7 +33,7 @@ jobs:
 
 workflows:
   version: 2
-  build_and_publish_diagnostics:
+  build-and-publish-diagnostics:
     jobs:
       - build
       - publish-github-release:
@@ -42,5 +42,3 @@ workflows:
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
-            branches:
-              only: master
