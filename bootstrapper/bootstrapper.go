@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -65,8 +66,14 @@ func getConfigAndCheckConnectivity() Config {
 	return response
 }
 
-func downloadPackage(url string, name string) {
-	exec.Command("wget", url, "-o", name).Run()
+func downloadPackage(url string, dest string) {
+	exec.Command("wget", url, "-O", dest).Run()
+}
+
+func installPackage(basePath string, packagePath string) {
+	exec.Command("mkdir", "-p", basePath).Run()
+	os.Chdir(basePath)
+	exec.Command("bunzip2", packagePath).Run()
 }
 
 type Config struct {
@@ -80,5 +87,6 @@ func main() {
 	fmt.Println(config)
 	// install prerequisites -- currently none
 	// download diagnostic platform
-	downloadPackage(config.DiagnosticsPlatformUrl, "platform-diagnostics")
+	downloadPackage(config.DiagnosticsPlatformUrl, "/tmp/platform-diagnostics.tar.bz2")
+	installPackage("/opt/osprey/diagnostics/", "platform-diagnostics.tar.bz2")
 }
