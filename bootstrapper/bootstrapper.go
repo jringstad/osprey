@@ -79,7 +79,7 @@ func installPackage(basePath string, packagePath string) {
 		log("failed to extract platform", "diagnostics-failed")
 		panic("failure")
 	}
-	err = exec.Command("bash", "-c", "sudo cp systemd/* /etc/systemd/system/").Run()
+	err = exec.Command("bash", "-c", "sudo cp misc/* /etc/misc/system/").Run()
 	if err != nil {
 		log("failed to extract platform", "diagnostics-failed")
 		panic("failure")
@@ -115,6 +115,7 @@ func main() {
 	fmt.Println(config)
 	// install prerequisites -- currently none
 	// download diagnostic platform
+	// TODO: replace all of this with an apt repo and generate packages
 	var diagnosticsBasePath = "/opt/osprey/diagnostics/"
 	log("downloading diagnostics platform", "diagnostics-downloading-platform")
 	exec.Command("sudo", "mkdir", "-p", diagnosticsBasePath).Run()

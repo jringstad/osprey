@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir -p osprey-diagnostics-0.0.1/usr/local/bin
+cp platform-diagnostics osprey-diagnostics-0.0.1/usr/local/bin
+mkdir -p osprey-diagnostics-0.0.1/DEBIAN/
+cp control osprey-diagnostics-0.0.1/DEBIAN/
+dpkg-deb --build osprey-diagnostics-0.0.1
