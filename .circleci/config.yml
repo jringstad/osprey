@@ -17,7 +17,7 @@ jobs:
       - persist_to_workspace:
           root: /go/src/github.com/jringstad/osprey/platform-diagnostics
           paths:
-            - platform-diagnostics-0.0.1.deb
+            - osprey-diagnostics-0.0.1.deb
 
   publish-github-release:
     docker:
