@@ -27,7 +27,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - aws-s3/copy:
-          from: platform-diagnostics-0.0.1.deb
+          from: osprey-diagnostics-0.0.1.deb
           to: 's3://osprey-groundstation/binaries/'
           arguments: |
             --acl public-read
