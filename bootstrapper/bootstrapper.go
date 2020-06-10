@@ -79,7 +79,7 @@ func installPackage(basePath string, packagePath string) {
 		log("failed to extract platform", "diagnostics-failed")
 		panic("failure")
 	}
-	err = exec.Command("sudo", "cp", "systemd/*", "/etc/systemd/system/").Run()
+	err = exec.Command("bash", "-c", "sudo cp systemd/* /etc/systemd/system/").Run()
 	if err != nil {
 		log("failed to extract platform", "diagnostics-failed")
 		panic("failure")
