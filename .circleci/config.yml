@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
-      - run: GOARCH=arm64 GOOS=linux go build platform-diagnostics.go
+      - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
       - run: tar -cf platform-diagnostics.tar platform-diagnostics systemd
       - run: bzip2 platform-diagnostics.tar
       - persist_to_workspace:
