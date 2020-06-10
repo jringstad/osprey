@@ -13,6 +13,7 @@ jobs:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
       - run: go build platform-diagnostics.go
+      - run: mkdir /tmp/workspace
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -21,10 +22,11 @@ jobs:
   publish-github-release:
     docker:
       - image: circleci/golang:1.9
-    working_directory: /tmp/artifacts/
+    working_directory: /tmp/workspace/
     steps:
+      - run: mkdir /tmp/workspace
       - attach_workspace:
-          at: /tmp/artifacts/
+          at: /tmp/workspace
       - run: pwd
       - run: ls
       - aws-s3/copy:
