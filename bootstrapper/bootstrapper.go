@@ -2,8 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -19,7 +22,7 @@ import (
 - save ID
 - initialize platform diagnostics
 - initialize platform
- */
+*/
 
 const BootstrapperConfigFile = "https://osprey-groundstation.s3-eu-west-1.amazonaws.com/bootstrapper/bootstrapper-config.json"
 
@@ -28,15 +31,15 @@ func runCommand(command string) string {
 	return strings.TrimSpace(string(out))
 }
 func log(message string, soundName string) {
-	exec.Command("aplay", "sounds/" + soundName + ".wav").Run()
+	exec.Command("aplay", "sounds/"+soundName+".wav").Run()
 }
 
 func isInterfaceUp(networkInterface string) bool {
-	err := exec.Command("bash", "-c", "ifconfig " + networkInterface + " | grep \"RUNNING\"").Run()
+	err := exec.Command("bash", "-c", "ifconfig "+networkInterface+" | grep \"RUNNING\"").Run()
 	return err == nil
 }
 
-func getConfigAndCheckConnectivity() interface{} {
+func getConfigAndCheckConnectivity() Config {
 	log("bootstrapper testing uplink", "uplink-test")
 	resp, err := http.Get(BootstrapperConfigFile)
 	if err != nil {
@@ -48,7 +51,7 @@ func getConfigAndCheckConnectivity() interface{} {
 		log("failed to establish uplink (failed to read config file)", "uplink-failed")
 		panic("failed to establish uplink")
 	}
-	var response interface{}
+	var response Config
 	err = json.Unmarshal(jsonBytes, &response)
 	if err != nil {
 		log("failed to establish uplink (failed to parse)", "uplink-failed")
@@ -64,10 +67,25 @@ func getConfigAndCheckConnectivity() interface{} {
 	return response
 }
 
+func downloadPackage(url string, name string) {
+	fmt.Println(url)
+	out, _ := os.Create(name)
+	defer out.Close()
+	resp, _ := http.Get(url)
+	defer resp.Body.Close()
+	io.Copy(out, resp.Body)
+}
+
+type Config struct {
+	GroundstationUrl       string `json:"groundstation-url"`
+	DiagnosticsPlatformUrl string `json:"diagnostics-platform"`
+}
+
 func main() {
 	log("bootstrapper initializing", "initializing")
 	var config = getConfigAndCheckConnectivity()
+	fmt.Println(config)
 	// install prerequisites -- currently none
 	// download diagnostic platform
-
+	downloadPackage(config.DiagnosticsPlatformUrl, "platform-diagnostics")
 }
