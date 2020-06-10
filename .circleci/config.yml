@@ -13,9 +13,8 @@ jobs:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
       - run: go build platform-diagnostics.go
-      - run: mkdir /tmp/workspace
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: /go/src/github.com/jringstad/osprey/platform-diagnostics
           paths:
             - platform-diagnostics
 
