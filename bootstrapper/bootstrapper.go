@@ -74,7 +74,7 @@ func downloadPackage(url string, dest string) bool {
 
 func installPackage(basePath string, packagePath string) {
 	os.Chdir(basePath)
-	exec.Command("sudo", "bunzip2", packagePath).Run()
+	exec.Command("sudo", "tar", "-xf", packagePath).Run()
 }
 
 type Config struct {
