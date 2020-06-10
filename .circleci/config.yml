@@ -21,11 +21,12 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/ruby:2.4.2-jessie-node
     working_directory: /tmp/workspace/
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - run: gem install deb-s3
       - aws-s3/copy:
           from: osprey-diagnostics-0.0.1.deb
           to: 's3://osprey-groundstation/binaries/'
