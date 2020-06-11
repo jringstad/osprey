@@ -104,6 +104,20 @@ func enableAndStartService(serviceName string) {
 	}
 }
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func addRepo() {
+	d1 := []byte("deb [trusted=yes] https://osprey-groundstation.s3.amazonaws.com stable main\n")
+	err := ioutil.WriteFile("/etc/apt/sources.list.d/osprey.list", d1, 0644)
+	check(err)
+	err = exec.Command("sudo", "apt-get", "update").Run()
+	check(err)
+}
+
 type Config struct {
 	GroundstationUrl       string `json:"groundstation-url"`
 	DiagnosticsPlatformUrl string `json:"diagnostics-platform"`
@@ -116,7 +130,13 @@ func main() {
 	// install prerequisites -- currently none
 	// download diagnostic platform
 	// TODO: replace all of this with an apt repo and generate packages
+	addRepo()
+	err := exec.Command("sudo", "apt-get", "install", "osprey-diagnostics").Run()
+	check(err)
+	
+	/*
 	var diagnosticsBasePath = "/opt/osprey/diagnostics/"
+
 	log("downloading diagnostics platform", "diagnostics-downloading-platform")
 	exec.Command("sudo", "mkdir", "-p", diagnosticsBasePath).Run()
 	success := downloadPackage(config.DiagnosticsPlatformUrl, diagnosticsBasePath)
@@ -127,4 +147,5 @@ func main() {
 	installPackage(diagnosticsBasePath, "platform-diagnostics.tar.bz2")
 	enableAndStartService("osprey-diagnostics.timer")
 	enableAndStartService("osprey-diagnostics.service")
+	*/
 }
