@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"os/exec"
 	"strings"
 )
@@ -66,26 +65,6 @@ func getConfigAndCheckConnectivity() Config {
 	return response
 }
 
-func downloadPackage(url string, dest string) bool {
-	os.Chdir(dest)
-	err := exec.Command("sudo", "wget", url).Run()
-	return err == nil
-}
-
-func installPackage(basePath string, packagePath string) {
-	os.Chdir(basePath)
-	err := exec.Command("sudo", "tar", "-xf", packagePath).Run()
-	if err != nil {
-		log("failed to extract platform", "diagnostics-failed")
-		panic("failure")
-	}
-	err = exec.Command("bash", "-c", "sudo cp misc/* /etc/misc/system/").Run()
-	if err != nil {
-		log("failed to extract platform", "diagnostics-failed")
-		panic("failure")
-	}
-}
-
 func enableAndStartService(serviceName string) {
 	err := exec.Command("sudo", "systemctl", "daemon-reload").Run()
 	if err != nil {
@@ -132,19 +111,6 @@ func main() {
 	addRepo()
 	err := exec.Command("sudo", "apt-get", "install", "osprey-diagnostics").Run()
 	check(err)
-
-	/*
-	var diagnosticsBasePath = "/opt/osprey/diagnostics/"
-
-	log("downloading diagnostics platform", "diagnostics-downloading-platform")
-	exec.Command("sudo", "mkdir", "-p", diagnosticsBasePath).Run()
-	success := downloadPackage(config.DiagnosticsPlatformUrl, diagnosticsBasePath)
-	if !success {
-		log("failed to download platform", "diagnostics-downloading-failure")
-		panic("failure")
-	}
-	installPackage(diagnosticsBasePath, "platform-diagnostics.tar.bz2")
-	enableAndStartService("osprey-diagnostics.timer")
 	enableAndStartService("osprey-diagnostics.service")
-	*/
+	enableAndStartService("osprey-diagnostics.timer")
 }
