@@ -111,8 +111,7 @@ func check(e error) {
 }
 
 func addRepo() {
-	d1 := []byte("deb [trusted=yes] https://osprey-groundstation.s3.amazonaws.com stable main\n")
-	err := ioutil.WriteFile("/etc/apt/sources.list.d/osprey.list", d1, 0644)
+	err := exec.Command("sudo", "bash", "-c", "echo \"deb [trusted=yes] https://osprey-groundstation.s3.amazonaws.com stable main\" > /etc/apt/sources.list.d/osprey.list").Run()
 	check(err)
 	err = exec.Command("sudo", "apt-get", "update").Run()
 	check(err)
@@ -133,7 +132,7 @@ func main() {
 	addRepo()
 	err := exec.Command("sudo", "apt-get", "install", "osprey-diagnostics").Run()
 	check(err)
-	
+
 	/*
 	var diagnosticsBasePath = "/opt/osprey/diagnostics/"
 
