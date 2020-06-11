@@ -27,10 +27,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run: gem install deb-s3
-      - run: deb-s3 upload \
-          --bucket osprey-groundstation \
-          --preserve-versions \
-          osprey-diagnostics-0.0.1.deb
+      - run: deb-s3 upload osprey-diagnostics-0.0.1.deb --bucket osprey-groundstation --preserve-versions
 
 workflows:
   version: 2
