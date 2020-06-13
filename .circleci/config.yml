@@ -13,12 +13,18 @@ jobs:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
       - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
+      - persist_to_workspace:
+          root: /go/src/github.com/jringstad/
+          paths:
+            - osprey
 
   publish-github-release:
     docker:
       - image: circleci/ruby:2.4.2-jessie-node
     working_directory: /tmp/workspace/
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
       - run: ./make-deb $CIRCLE_TAG
       - run: gem install deb-s3
