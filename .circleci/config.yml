@@ -25,8 +25,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: ls
-      - run: pwd
+      - run: cd osprey
       - run: ./make-deb $CIRCLE_TAG
       - run: gem install deb-s3
       - run: deb-s3 upload osprey-diagnostics-$(CIRCLE_TAG).deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
