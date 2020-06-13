@@ -1,5 +1,5 @@
 Package: osprey-diagnostics
-Version: 0.0.1
+Version: RELEASE_TAG
 Section: base
 Priority: optional
 Architecture: armhf

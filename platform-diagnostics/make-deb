@@ -6,6 +6,7 @@ mkdir -p osprey-diagnostics-$TAG/usr/local/bin
 cp platform-diagnostics osprey-diagnostics-$TAG/usr/local/bin
 
 mkdir -p osprey-diagnostics-$TAG/DEBIAN/
+sed -i "s/RELEASE_TAG/$TAG/" misc/control
 cp misc/control osprey-diagnostics-$TAG/DEBIAN/
 cp misc/osprey-diagnostics.service osprey-diagnostics-$TAG/DEBIAN/
 cp misc/osprey-diagnostics.timer osprey-diagnostics-$TAG/DEBIAN/
