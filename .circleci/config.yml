@@ -28,6 +28,7 @@ jobs:
           at: /tmp/workspace
       - run: gem install deb-s3
       - run: deb-s3 upload osprey-diagnostics-0.0.1.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
+      - run: echo $CIRCLE_TAG
 
 workflows:
   version: 2
