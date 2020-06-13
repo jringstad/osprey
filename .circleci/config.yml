@@ -25,7 +25,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: cd osprey
       - run: pwd
       - run: ls
       - run: ./make-deb $CIRCLE_TAG
