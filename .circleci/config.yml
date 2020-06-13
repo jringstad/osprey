@@ -13,22 +13,16 @@ jobs:
       - checkout:
           path: /go/src/github.com/jringstad/osprey/
       - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
-      - run: ./make-deb
-      - persist_to_workspace:
-          root: /go/src/github.com/jringstad/osprey/platform-diagnostics
-          paths:
-            - osprey-diagnostics-0.0.1.deb
 
   publish-github-release:
     docker:
       - image: circleci/ruby:2.4.2-jessie-node
     working_directory: /tmp/workspace/
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
+      - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
+      - run: ./make-deb $CIRCLE_TAG
       - run: gem install deb-s3
-      - run: deb-s3 upload osprey-diagnostics-0.0.1.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
-      - run: echo $CIRCLE_TAG
+      - run: deb-s3 upload osprey-diagnostics-$(CIRCLE_TAG).deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
 
 workflows:
   version: 2
