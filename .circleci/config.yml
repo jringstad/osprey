@@ -4,34 +4,9 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.15
-jobs:
-  build:
-    docker:
-      - image: circleci/golang:1.9
-    working_directory: /go/src/github.com/jringstad/osprey/platform-diagnostics
-    steps:
-      - checkout:
-          path: /go/src/github.com/jringstad/osprey/
-      - run: GOARCH=arm GOOS=linux go build platform-diagnostics.go
-      - persist_to_workspace:
-          root: /go/src/github.com/jringstad/
-          paths:
-            - osprey
-
-  publish-github-release:
-    docker:
-      - image: circleci/ruby:2.4.2-jessie-node
-    working_directory: /tmp/workspace/osprey/platform-diagnostics/
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run: ./make-deb $CIRCLE_TAG
-      - run: gem install deb-s3
-      - run: deb-s3 upload osprey-diagnostics-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
 
 workflows:
-  version: 2
-  build-and-publish-diagnostics:
+  main:
     jobs:
       - build:
           filters:
@@ -45,3 +20,27 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+    working_directory: /go/src/github.com/jringstad/osprey/bootstrapper
+    steps:
+      - checkout:
+          path: /go/src/github.com/jringstad/osprey/
+      - run: GOARCH=arm GOOS=linux go build bootstrapper.go
+      - persist_to_workspace:
+          root: /go/src/github.com/jringstad/
+          paths:
+            - osprey
+
+  publish-github-release:
+    docker:
+      - image: circleci/ruby:2.4.2-jessie-node
+    working_directory: /tmp/workspace/osprey/
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: ./make-deb $CIRCLE_TAG
+      - run: gem install deb-s3
+      - run: deb-s3 upload osprey-bootloader-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}

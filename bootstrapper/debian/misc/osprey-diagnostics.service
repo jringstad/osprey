@@ -1,0 +1,10 @@
+[Unit]
+Description=Osprey bootstrapper
+
+[Service]
+Type=oneshot
+ExecStart=/opt/osprey/bootstrapper/bootstrapper
+User=pi
+
+[Install]
+WantedBy=multi-user.target

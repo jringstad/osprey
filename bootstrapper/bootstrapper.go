@@ -55,6 +55,7 @@ type Config struct {
 	ServicesToStart		   []string `json:"services-to-start"`
 }
 
+// TODO: make bootstrapper depend on network connectivity to avoid startup failure?
 func main() {
 	log("bootstrapper initializing", "initializing")
 	config := MountKeyAndReadConfig()
