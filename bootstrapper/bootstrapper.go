@@ -49,11 +49,12 @@ func MountKeyAndReadConfig() Config {
 }
 
 type Config struct {
-	GroundstationUrl      string   `json:"groundstation-url"`
+	Groundstation         string   `json:"groundstation"`
 	RepoUrl               string   `json:"repo-url"`
 	PackagesToInstall     []string `json:"packages-to-install"`
 	ServicesToStart       []string `json:"services-to-start"`
 	GroundstationCertPath string   `json:"groundstation-cert-path"`
+	GroundstationUser     string   `json:"groundstation-user"`
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?
@@ -62,9 +63,9 @@ func main() {
 	utils.Log("bootstrapper initializing", "initializing")
 	utils.Log("Checking for key", "key-checking")
 	config := MountKeyAndReadConfig()
-	utils.AddRepo(config.RepoUrl)                                                       // add repo and apt-get update
+	utils.AddRepo(config.RepoUrl) // add repo and apt-get update
 	utils.Log("self-updating", "self-update")
-	wasUpdated := utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"})       // update self, reboot if changes were made
+	wasUpdated := utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"}) // update self, reboot if changes were made
 	utils.Log("installing platform", "installing-platform")
 	wasUpdated = wasUpdated || utils.UpdateOrInstallAndReboot(config.PackagesToInstall) // install or update osprey, reboot if changes were made
 	if wasUpdated {

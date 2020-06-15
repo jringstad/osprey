@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+TAG=$1
+mkdir -p osprey-autossh-$TAG/usr/local/bin
+cp ../bootstrapper osprey-autossh-$TAG/usr/local/bin/osprey-autossh
+mkdir -p osprey-autossh-$TAG/lib/systemd/system/
+cp misc/osprey-autossh.service osprey-autossh-$TAG/lib/systemd/system/
+
+mkdir -p osprey-autossh-$TAG/usr/share/osprey-autossh/
+cp ../sounds/*.wav osprey-autossh-$TAG/usr/share/osprey-autossh/
+
+mkdir -p osprey-autossh-$TAG/DEBIAN/
+cp misc/control osprey-autossh-$TAG/DEBIAN/
+cp misc/rules osprey-autossh-$TAG/DEBIAN/
+sed -e "s/RELEASE_TAG/$TAG/" -i osprey-autossh-$TAG/DEBIAN/control
+
+dpkg-deb --build osprey-autossh-$TAG
