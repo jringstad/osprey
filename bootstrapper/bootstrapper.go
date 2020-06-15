@@ -38,7 +38,7 @@ func log(message string, soundName string) {
 }
 
 func MountKeyAndReadConfig() Config {
-	utils.RunCommand("sudo mkdir /mnt/osprey-key")
+	utils.RunCommand("sudo mkdir -p /mnt/osprey-key")
 	utils.RunCommand("sudo mount /dev/sda1 /mnt/osprey-key")
 	jsonFile, err := os.Open("/mnt/osprey-key/osprey-config.json")
 	utils.Check(err, "opening json file")
