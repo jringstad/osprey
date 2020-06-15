@@ -1,4 +1,4 @@
-package autossh
+package main
 
 import (
 	"encoding/json"
