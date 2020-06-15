@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"strings"
 	"sync"
 )
 
@@ -42,7 +41,7 @@ func Check(e error, operationThatFailed string) {
 	}
 }
 
-func RunCommand(command string) string {
+func RunCommand(command string) {
 	cmd := exec.Command("bash", "-c", command)
 
 	var stdout, stderr []byte
