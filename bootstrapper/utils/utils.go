@@ -7,7 +7,8 @@ import (
 )
 
 func RunCommand(command string) string {
-	out, err := exec.Command("bash", "-c", command).Output()
+	cmd := exec.Command("bash", "-c", command)
+	out, err := cmd.CombinedOutput()
 	Check(err, "executing command '" + command + "': " + string(out))
 	return strings.TrimSpace(string(out))
 }
