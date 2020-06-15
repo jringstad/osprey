@@ -10,7 +10,7 @@ import (
 func RunCommand(command string) string {
 	cmd := exec.Command("bash", "-c", command)
 	out, err := cmd.CombinedOutput()
-	Check(err, "executing command '" + command + "': " + string(out))
+	Check(err, "executing command '"+command+"': "+string(out))
 	return strings.TrimSpace(string(out))
 }
 
@@ -28,22 +28,24 @@ func AddRepo(repoUrl string) {
 	RunCommand("sudo apt-get update")
 }
 
-func UpdateOrInstallAndReboot(packages []string) {
-	needsReboot := false
+func UpdateOrInstallAndReboot(packages []string) bool {
+	wasUpdated := false
 	for _, pkg := range packages {
 		out := RunCommand("sudo apt-get install " + pkg)
 		if !strings.Contains(out, "is already the newest version") {
 			fmt.Println("package " + pkg + " was updated, will reboot later")
-			needsReboot = true
+			wasUpdated = true
 		}
 	}
-	if needsReboot {
-		fmt.Println("one or more packages were updated, rebooting...")
-		RunCommand("sudo systemctl reboot")
-		for {
-			time.Sleep(10 * time.Second)
-			fmt.Println("waiting for reboot")
-		}
+	return wasUpdated
+}
+
+func Reboot() {
+	fmt.Println("one or more packages were updated, rebooting...")
+	RunCommand("sudo systemctl reboot")
+	for {
+		time.Sleep(10 * time.Second)
+		fmt.Println("waiting for reboot")
 	}
 }
 

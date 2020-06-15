@@ -1,11 +1,11 @@
 package main
 
 import (
+	"./utils"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"./utils"
 )
 
 /*
@@ -15,7 +15,7 @@ SD card image creation
 - add repos
 - install bootstrapper
 TODO: make autossh depend on bootstrapper startup, to make sure it's accessing the mounted cert?
- */
+*/
 
 /*
 - initialize
@@ -53,20 +53,23 @@ func MountKeyAndReadConfig() Config {
 }
 
 type Config struct {
-	GroundstationUrl       string `json:"groundstation-url"`
-	RepoUrl				   string `json:"repo-url"`
-	PackagesToInstall      []string `json:"packages-to-install"`
-	ServicesToStart		   []string `json:"services-to-start"`
-	GroundstationCertPath  string `json:"groundstation-cert-path"`
+	GroundstationUrl      string   `json:"groundstation-url"`
+	RepoUrl               string   `json:"repo-url"`
+	PackagesToInstall     []string `json:"packages-to-install"`
+	ServicesToStart       []string `json:"services-to-start"`
+	GroundstationCertPath string   `json:"groundstation-cert-path"`
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?
 func main() {
 	log("bootstrapper initializing", "initializing")
 	config := MountKeyAndReadConfig()
-	utils.AddRepo(config.RepoUrl)                                       // add repo and apt-get update
-	utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"}) // update self, reboot if changes were made
-	utils.UpdateOrInstallAndReboot(config.PackagesToInstall)     // install or update osprey, reboot if changes were made
+	utils.AddRepo(config.RepoUrl)                                                       // add repo and apt-get update
+	wasUpdated := utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"})       // update self, reboot if changes were made
+	wasUpdated = wasUpdated || utils.UpdateOrInstallAndReboot(config.PackagesToInstall) // install or update osprey, reboot if changes were made
+	if wasUpdated {
+		utils.Reboot()
+	}
 	utils.StartServices(config.ServicesToStart)
 	log("bootstrapper exited successfully", "exited")
 }
