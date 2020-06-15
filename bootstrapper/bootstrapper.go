@@ -2,115 +2,64 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"net/http"
+	"os"
 	"os/exec"
-	"strings"
+	"./utils"
 )
 
 /*
+SD card image creation
+- change password
+- install autossh
+- add repos
+- install bootstrapper
+ */
+
+/*
 - initialize
-- check internet connection
-- get environment variables
-- install prerequisites
-- download platform diagnostics
-- download platform
-- register with basestation
-- save ID
-- initialize platform diagnostics
-- initialize platform
+- mount USB drive and verify content
+- add repo URL specified on USB drive
+- apt-get update
+- update self and reboot if update occurred
+- check if osprey is already installed
+- osprey is installed:
+	- update osprey and reboot if update occurred
+	- start osprey
+- osprey is not installed:
+	- install osprey
+	- reboot
 */
 
-const BootstrapperConfigFile = "https://osprey-groundstation.s3-eu-west-1.amazonaws.com/bootstrapper/bootstrapper-config.json"
-
-func runCommand(command string) string {
-	out, _ := exec.Command("bash", "-c", command).Output()
-	return strings.TrimSpace(string(out))
-}
 func log(message string, soundName string) {
 	exec.Command("aplay", "sounds/"+soundName+".wav").Run()
 }
 
-func isInterfaceUp(networkInterface string) bool {
-	err := exec.Command("bash", "-c", "ifconfig "+networkInterface+" | grep \"RUNNING\"").Run()
-	return err == nil
-}
-
-func getConfigAndCheckConnectivity() Config {
-	log("bootstrapper testing uplink", "uplink-test")
-	resp, err := http.Get(BootstrapperConfigFile)
-	if err != nil {
-		log("failed to establish uplink (couldn't get config file)", "uplink-failed")
-		panic("failed to establish uplink")
-	}
-	jsonBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log("failed to establish uplink (failed to read config file)", "uplink-failed")
-		panic("failed to establish uplink")
-	}
-	var response Config
-	err = json.Unmarshal(jsonBytes, &response)
-	if err != nil {
-		log("failed to establish uplink (failed to parse)", "uplink-failed")
-		panic("failed to establish uplink")
-	}
-
-	if isInterfaceUp("eth0") {
-		log("uplink success (wired)", "uplink-wired")
-	} else {
-		// assuming cellular
-		log("uplink success (success)", "uplink-cellular")
-	}
-	return response
-}
-
-func enableAndStartService(serviceName string) {
-	err := exec.Command("sudo", "systemctl", "daemon-reload").Run()
-	if err != nil {
-		log("failed to reload daemons", "diagnostics-failed")
-		panic("failure")
-	}
-	err = exec.Command("sudo", "systemctl", "enable", serviceName).Run()
-	if err != nil {
-		log("failed to enable service", "diagnostics-failed")
-		panic("failure")
-	}
-	err = exec.Command("sudo", "systemctl", "start", serviceName).Run()
-	if err != nil {
-		log("failed to start service", "diagnostics-failed")
-		panic("failure")
-	}
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func addRepo() {
-	err := exec.Command("sudo", "bash", "-c", "echo \"deb [trusted=yes] https://osprey-groundstation.s3.amazonaws.com stable main\" > /etc/apt/sources.list.d/osprey.list").Run()
-	check(err)
-	err = exec.Command("sudo", "apt-get", "update").Run()
-	check(err)
+func MountKeyAndReadConfig() Config {
+	utils.RunCommand("sudo mkdir /mnt/osprey-key")
+	utils.RunCommand("sudo mount /dev/sdb1 /mnt/osprey-key")
+	jsonFile, err := os.Open("/mnt/osprey-key/osprey-config.json")
+	utils.Check(err, "opening json file")
+	defer jsonFile.Close()
+	var config Config
+	jsonBytes, err := ioutil.ReadAll(jsonFile)
+	utils.Check(err, "reading json file")
+	json.Unmarshal(jsonBytes, &config)
+	return config
 }
 
 type Config struct {
 	GroundstationUrl       string `json:"groundstation-url"`
-	DiagnosticsPlatformUrl string `json:"diagnostics-platform"`
+	RepoUrl				   string `json:"repo-url"`
+	PackagesToInstall      []string `json:"packages-to-install"`
+	ServicesToStart		   []string `json:"services-to-start"`
 }
 
 func main() {
 	log("bootstrapper initializing", "initializing")
-	var config = getConfigAndCheckConnectivity()
-	fmt.Println(config)
-	// install prerequisites -- currently none
-	// download diagnostic platform
-	// TODO: replace all of this with an apt repo and generate packages
-	addRepo()
-	err := exec.Command("sudo", "apt-get", "install", "osprey-diagnostics").Run()
-	check(err)
-	enableAndStartService("osprey-diagnostics.service")
-	enableAndStartService("osprey-diagnostics.timer")
+	config := MountKeyAndReadConfig()
+	utils.AddRepo(config.RepoUrl)                                       // add repo and apt-get update
+	utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"}) // update self, reboot if changes were made
+	utils.UpdateOrInstallAndReboot(config.PackagesToInstall)     // install or update osprey, reboot if changes were made
+	utils.StartServices(config.ServicesToStart)
 }
