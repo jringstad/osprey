@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 func RunCommand(command string) string {
@@ -28,8 +29,21 @@ func AddRepo(repoUrl string) {
 }
 
 func UpdateOrInstallAndReboot(packages []string) {
+	needsReboot := false
 	for _, pkg := range packages {
-		RunCommand("sudo apt-get install " + pkg)
+		out := RunCommand("sudo apt-get install " + pkg)
+		if !strings.Contains(out, "is already the newest version") {
+			fmt.Println("package " + pkg + " was updated, will reboot later")
+			needsReboot = true
+		}
+	}
+	if needsReboot {
+		fmt.Println("one or more packages were updated, rebooting...")
+		RunCommand("sudo systemctl reboot")
+		for {
+			time.Sleep(10 * time.Second)
+			fmt.Println("waiting for reboot")
+		}
 	}
 }
 
