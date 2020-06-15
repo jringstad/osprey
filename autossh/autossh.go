@@ -108,8 +108,7 @@ AUTOSSH_PORT=0 \
 autossh -M 0 -o \"ServerAliveInterval 5\" -o \"ServerAliveCountMax 3\" \
 %s@%s -N -R 8090:localhost:22 -vv \
 -i /mnt/osprey-key/groundstation-cert.pem`
-	out := RunCommand(fmt.Sprintf(command, config.GroundstationUser, config.Groundstation))
-	fmt.Println(out)
+	RunCommand(fmt.Sprintf(command, config.GroundstationUser, config.Groundstation))
 }
 /*
 AUTOSSH_GATETIME=0 \
