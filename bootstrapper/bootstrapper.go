@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -32,7 +33,8 @@ SD card image creation
 */
 
 func log(message string, soundName string) {
-	exec.Command("aplay", "sounds/"+soundName+".wav").Run()
+	//exec.Command("aplay", "sounds/"+soundName+".wav").Run()
+	fmt.Println(message)
 }
 
 func MountKeyAndReadConfig() Config {
