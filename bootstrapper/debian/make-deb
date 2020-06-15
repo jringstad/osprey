@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eu -o pipefail
 
 TAG=$1
 mkdir -p osprey-bootstrapper-$TAG/usr/local/bin

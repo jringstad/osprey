@@ -59,8 +59,8 @@ type Config struct {
 	ForceHdmiAudioHack    bool     `json:"force-hdmi-audio-hack"`
 }
 
-// TODO: make bootstrapper depend on network connectivity to avoid startup failure?
 // TODO: make Log() only take one argument and generate string from text?
+// TODO: global panic handler that outputs generic error
 func main() {
 	utils.Log("bootstrapper initializing", "initializing")
 	utils.Log("Checking for key", "key-checking")
