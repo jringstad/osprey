@@ -3,10 +3,11 @@
 
 TAG=$1
 mkdir -p osprey-bootstrapper-$TAG/usr/local/bin
-cp ../bootstrapper osprey-bootstrapper-$TAG/usr/local/bin
+cp ../bootstrapper osprey-bootstrapper-$TAG/usr/local/bin/osprey-bootstrapper
 
 mkdir -p osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
+cp misc/rules osprey-bootstrapper-$TAG/DEBIAN/
 sed -e "s/RELEASE_TAG/$TAG/" -i osprey-bootstrapper-$TAG/DEBIAN/control
 cp misc/osprey-bootstrapper.service osprey-bootstrapper-$TAG/DEBIAN/
 

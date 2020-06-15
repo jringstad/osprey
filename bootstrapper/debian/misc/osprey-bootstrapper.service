@@ -3,7 +3,7 @@ Description=Osprey bootstrapper
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/bootstrapper
+ExecStart=/usr/local/bin/osprey-bootstrapper
 User=pi
 
 [Install]
