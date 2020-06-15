@@ -12,6 +12,8 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
       - publish-github-release:
           requires:
             - build
