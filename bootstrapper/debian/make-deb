@@ -7,7 +7,7 @@ cp ../bootstrapper osprey-bootstrapper-$TAG/usr/local/bin
 
 mkdir -p osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
-sed -e "s/RELEASE_TAG/$TAG/" -i "" osprey-bootstrapper-$TAG/DEBIAN/control
+sed -e "s/RELEASE_TAG/$TAG/" -i osprey-bootstrapper-$TAG/DEBIAN/control
 cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/osprey-bootstrapper.service osprey-bootstrapper-$TAG/DEBIAN/
 
