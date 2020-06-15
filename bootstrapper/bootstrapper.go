@@ -55,6 +55,7 @@ type Config struct {
 	ServicesToStart       []string `json:"services-to-start"`
 	GroundstationCertPath string   `json:"groundstation-cert-path"`
 	GroundstationUser     string   `json:"groundstation-user"`
+	PlatformIdentifier    string   `json:"platform-identifier"`
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?

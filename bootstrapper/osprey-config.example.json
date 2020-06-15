@@ -4,5 +4,6 @@
   "packages-to-install": ["osprey-platform"],
   "services-to-start": ["osprey-platform"],
   "groundstation-cert-path": "groundstation-cert.pem",
-  "groundstation-user": "ubuntu"
+  "groundstation-user": "ubuntu",
+  "platform-identifier": "osprey-1"
 }
