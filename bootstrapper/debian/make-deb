@@ -2,13 +2,13 @@
 
 
 TAG=$1
-mkdir -p osprey-diagnostics-$TAG/usr/local/bin
-cp platform-diagnostics osprey-diagnostics-$TAG/usr/local/bin
+mkdir -p osprey-bootstrapper-$TAG/usr/local/bin
+cp ../bootstrapper osprey-bootstrapper-$TAG/usr/local/bin
 
-mkdir -p osprey-diagnostics-$TAG/DEBIAN/
-sed -i "s/RELEASE_TAG/$TAG/" misc/control
-cp misc/control osprey-diagnostics-$TAG/DEBIAN/
-cp misc/osprey-diagnostics.service osprey-diagnostics-$TAG/DEBIAN/
-cp misc/osprey-diagnostics.timer osprey-diagnostics-$TAG/DEBIAN/
+mkdir -p osprey-bootstrapper-$TAG/DEBIAN/
+cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
+sed -e "s/RELEASE_TAG/$TAG/" -i "" osprey-bootstrapper-$TAG/DEBIAN/control
+cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
+cp misc/osprey-bootstrapper.service osprey-bootstrapper-$TAG/DEBIAN/
 
-dpkg-deb --build osprey-diagnostics-$TAG
+dpkg-deb --build osprey-bootstrapper-$TAG
