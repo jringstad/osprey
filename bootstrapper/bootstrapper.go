@@ -10,7 +10,6 @@ import (
 /*
 SD card image creation
 - change password
-- install autossh
 - add repos
 - install bootstrapper
 TODO: make autossh depend on bootstrapper startup, to make sure it's accessing the mounted cert?

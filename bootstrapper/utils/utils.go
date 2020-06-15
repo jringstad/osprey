@@ -39,14 +39,14 @@ func AddRepo(repoUrl string) {
 	// delete repo if it already exists, in case it changed, but don't fail if it didn't
 	RunCommand("sudo rm -rf /etc/apt/sources.list.d/osprey.list || true")
 	RunCommand("sudo bash -c 'echo \"deb [trusted=yes] " + repoUrl + " stable main\" > /etc/apt/sources.list.d/osprey.list'")
-	RunCommand("sudo apt-get update")
+	RunCommand("sudo apt-get update --assume-yes")
 }
 
 func UpdateOrInstallAndReboot(packages []string) bool {
 	defer RecoverErrorMessage("Failed to install package", "install-failure")
 	wasUpdated := false
 	for _, pkg := range packages {
-		out := RunCommand("sudo apt-get install " + pkg)
+		out := RunCommand("sudo apt-get install --assume-yes " + pkg)
 		if !strings.Contains(out, "is already the newest version") {
 			fmt.Println("package " + pkg + " was updated, will reboot later")
 			wasUpdated = true
