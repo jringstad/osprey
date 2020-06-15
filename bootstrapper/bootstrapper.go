@@ -56,6 +56,7 @@ type Config struct {
 	GroundstationCertPath string   `json:"groundstation-cert-path"`
 	GroundstationUser     string   `json:"groundstation-user"`
 	PlatformIdentifier    string   `json:"platform-identifier"`
+	ForceHdmiAudioHack    bool     `json:"force-hdmi-audio-hack"`
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?
@@ -64,6 +65,9 @@ func main() {
 	utils.Log("bootstrapper initializing", "initializing")
 	utils.Log("Checking for key", "key-checking")
 	config := MountKeyAndReadConfig()
+	if config.ForceHdmiAudioHack {
+		utils.RunCommand("sudo vcgencmd force_audio hdmi 1")
+	}
 	utils.AddRepo(config.RepoUrl) // add repo and apt-get update
 	utils.Log("self-updating", "self-update")
 	wasUpdated := utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"}) // update self, reboot if changes were made
