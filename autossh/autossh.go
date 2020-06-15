@@ -44,14 +44,23 @@ type Config struct {
 	PlatformIdentifier    string   `json:"platform-identifier"`
 }
 
+// TODO: add autossh dependency
 func main() {
 	config := ReadConfig()
 	command := `AUTOSSH_GATETIME=0 \
 AUTOSSH_POLL=20 \
 AUTOSSH_PORT=0 \
-autossh -f -M 0 -o \"ServerAliveInterval 5\" -o \"ServerAliveCountMax 3\" \
+autossh -M 0 -o \"ServerAliveInterval 5\" -o \"ServerAliveCountMax 3\" \
 %s@%s -N -R 8090:localhost:22 -vv \
 -i /mnt/osprey-key/groundstation-cert.pem`
 	out := RunCommand(fmt.Sprintf(command, config.GroundstationUser, config.Groundstation))
 	fmt.Println(out)
 }
+/*
+AUTOSSH_GATETIME=0 \
+AUTOSSH_POLL=20 \
+AUTOSSH_PORT=0 \
+autossh -M 0 -o "ServerAliveInterval 5" -o "ServerAliveCountMax 3" \
+ubuntu@ec2-3-250-190-252.eu-west-1.compute.amazonaws.com -N -R 8090:localhost:22 -vv \
+-i /mnt/osprey-key/groundstation-cert.pem
+ */
