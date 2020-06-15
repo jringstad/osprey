@@ -22,7 +22,7 @@ func Check(e error, operationThatFailed string) {
 func AddRepo(repoUrl string) {
 	// delete repo if it already exists, in case it changed, but don't fail if it didn't
 	RunCommand("sudo rm -rf /etc/apt/sources.list.d/osprey.list || true")
-	RunCommand("sudo bash -c echo \"deb [trusted=yes] " + repoUrl + " stable main\" > /etc/apt/sources.list.d/osprey.list")
+	RunCommand("sudo bash -c 'echo \"deb [trusted=yes] " + repoUrl + " stable main\" > /etc/apt/sources.list.d/osprey.list'")
 	RunCommand("sudo apt-get update")
 }
 
