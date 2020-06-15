@@ -38,6 +38,8 @@ func log(message string, soundName string) {
 }
 
 func MountKeyAndReadConfig() Config {
+	// unmount in case it's already mounted, but ignore failure
+	utils.RunCommand("sudo umount /mnt/osprey-key || true")
 	utils.RunCommand("sudo mkdir -p /mnt/osprey-key")
 	utils.RunCommand("sudo mount /dev/sda1 /mnt/osprey-key")
 	jsonFile, err := os.Open("/mnt/osprey-key/osprey-config.json")
@@ -66,4 +68,5 @@ func main() {
 	utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"}) // update self, reboot if changes were made
 	utils.UpdateOrInstallAndReboot(config.PackagesToInstall)     // install or update osprey, reboot if changes were made
 	utils.StartServices(config.ServicesToStart)
+	log("bootstrapper exited successfully", "exited")
 }

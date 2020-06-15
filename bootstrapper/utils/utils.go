@@ -28,7 +28,9 @@ func AddRepo(repoUrl string) {
 }
 
 func UpdateOrInstallAndReboot(packages []string) {
-	// ...
+	for _, pkg := range packages {
+		RunCommand("sudo apt-get install " + pkg)
+	}
 }
 
 func StartServices(services []string) {
