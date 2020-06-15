@@ -53,6 +53,7 @@ type Config struct {
 	RepoUrl				   string `json:"repo-url"`
 	PackagesToInstall      []string `json:"packages-to-install"`
 	ServicesToStart		   []string `json:"services-to-start"`
+	GroundstationCertPath  string `json:"groundstation-cert-path"`
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?

@@ -2,5 +2,6 @@
   "groundstation-url": "https://foo",
   "repo-url": "",
   "packages-to-install": ["osprey-platform"],
-  "services-to-start": ["osprey-platform"]
+  "services-to-start": ["osprey-platform"],
+  "groundstation-cert-path": "groundstation-cert.pem"
 }
