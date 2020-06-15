@@ -7,6 +7,18 @@ import (
 	"time"
 )
 
+func RecoverErrorMessage(message string, soundName string) {
+	if r := recover(); r != nil {
+		Log(message, soundName)
+		panic(r)
+	}
+}
+
+func Log(message string, soundName string) {
+	exec.Command("aplay", "/usr/share/osprey-bootstrapper/"+soundName+".wav").Run()
+	fmt.Println(message)
+}
+
 func RunCommand(command string) string {
 	cmd := exec.Command("bash", "-c", command)
 	out, err := cmd.CombinedOutput()
@@ -22,6 +34,8 @@ func Check(e error, operationThatFailed string) {
 }
 
 func AddRepo(repoUrl string) {
+	Log("Adding repository", "adding-repo")
+	defer RecoverErrorMessage("Adding repository failed", "adding-repo-failed")
 	// delete repo if it already exists, in case it changed, but don't fail if it didn't
 	RunCommand("sudo rm -rf /etc/apt/sources.list.d/osprey.list || true")
 	RunCommand("sudo bash -c 'echo \"deb [trusted=yes] " + repoUrl + " stable main\" > /etc/apt/sources.list.d/osprey.list'")
@@ -29,6 +43,7 @@ func AddRepo(repoUrl string) {
 }
 
 func UpdateOrInstallAndReboot(packages []string) bool {
+	defer RecoverErrorMessage("Failed to install package", "install-failure")
 	wasUpdated := false
 	for _, pkg := range packages {
 		out := RunCommand("sudo apt-get install " + pkg)
@@ -54,22 +69,3 @@ func StartServices(services []string) {
 		RunCommand("sudo systemctl start " + service)
 	}
 }
-
-/*
-func enableAndStartService(serviceName string) {
-	err := exec.Command("sudo", "systemctl", "daemon-reload").Run()
-	if err != nil {
-		log("failed to reload daemons", "diagnostics-failed")
-		panic("failure")
-	}
-	err = exec.Command("sudo", "systemctl", "enable", serviceName).Run()
-	if err != nil {
-		log("failed to enable service", "diagnostics-failed")
-		panic("failure")
-	}
-	err = exec.Command("sudo", "systemctl", "start", serviceName).Run()
-	if err != nil {
-		log("failed to start service", "diagnostics-failed")
-		panic("failure")
-	}
-}*/

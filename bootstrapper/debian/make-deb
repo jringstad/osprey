@@ -7,6 +7,9 @@ cp ../bootstrapper osprey-bootstrapper-$TAG/usr/local/bin/osprey-bootstrapper
 mkdir -p osprey-bootstrapper-$TAG/lib/systemd/system/
 cp misc/osprey-bootstrapper.service osprey-bootstrapper-$TAG/lib/systemd/system/
 
+mkdir -p osprey-bootstrapper-$TAG/usr/share/osprey-bootstrapper/
+cp ../sounds/*.wav osprey-bootstrapper-$TAG/usr/share/osprey-bootstrapper/
+
 mkdir -p osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/rules osprey-bootstrapper-$TAG/DEBIAN/

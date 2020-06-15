@@ -14,29 +14,16 @@ function generate_diagnostics() {
 }
 
 rm -f *.wav
-generate_bootstrapper "Bootstrapper initializing" initializing
-generate_bootstrapper "checking uplink availability" uplink-test
-generate_bootstrapper "failed to detect uplink" uplink-failed
-generate_bootstrapper "using cellular uplink" uplink-cellular
-generate_bootstrapper "using wired uplink" uplink-wired
-generate_bootstrapper "using wifi uplink" uplink-wifi
-generate_bootstrapper "installing system prerequisites" prerequisites
-generate_bootstrapper "failed" generic-failure
-generate_bootstrapper "succeeded" generic-success
-generate_bootstrapper "downloading platform" downloading-platform
-generate_bootstrapper "failed downloading platform release" downloading-failure
-generate_bootstrapper "downloading diagnostics platform" diagnostics-downloading-platform
-generate_bootstrapper "failed downloading diagnostics platform release" diagnostics-downloading-failure
-generate_bootstrapper "acquiring initial configuration" configuration
-generate_bootstrapper "failed to acquire initial configuration" configuration-failure
-generate_bootstrapper "initializing platform diagnostics" diagnostics-initializing
-generate_bootstrapper "failed to initialize platform diagnostics" diagnostics-failed
-generate_bootstrapper "initializing platform" platform-initializing
-generate_bootstrapper "failed to initialize platform" platform-failed
-generate_bootstrapper "Osprey platform online" platform-online
-generate_bootstrapper "Bootstrapper finished successfully" exit
-
-
-generate_diagnostics "Diagnostics platform online" diagnostics-online
-generate_diagnostics "Engines armed" engines-armed
-generate_diagnostics "Engines disarmed" engines-disarmed
+generate_bootstrapper "Bootstrapper initializing" initializing # used
+generate_bootstrapper "Checking for key" key-checking # used
+generate_bootstrapper "Failed to find key" key-failure # used
+generate_bootstrapper "Key is present" key-success # used
+generate_bootstrapper "adding repository" adding-repo # used
+generate_bootstrapper "adding repository failed" adding-repo-failed # used
+generate_bootstrapper "self-updating bootstrapper" self-update # used
+generate_bootstrapper "installing platform" installing-platform # used
+generate_bootstrapper "failed to install packages" install-failure # used
+generate_bootstrapper "packages have been updated, rebooting" rebooting # used
+generate_bootstrapper "nothing needed updating" no-updates # used
+generate_bootstrapper "starting platform services" starting-platform-services # used
+generate_bootstrapper "bootstrapper finished" finished # used

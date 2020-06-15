@@ -3,7 +3,6 @@ package main
 import (
 	"./utils"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -32,12 +31,8 @@ TODO: make autossh depend on bootstrapper startup, to make sure it's accessing t
 	- reboot
 */
 
-func log(message string, soundName string) {
-	//exec.Command("aplay", "sounds/"+soundName+".wav").Run()
-	fmt.Println(message)
-}
-
 func MountKeyAndReadConfig() Config {
+	defer utils.RecoverErrorMessage("Failed to find key", "key-failure")
 	// unmount in case it's already mounted, but ignore failure
 	utils.RunCommand("sudo umount /mnt/osprey-key || true")
 	utils.RunCommand("sudo mkdir -p /mnt/osprey-key")
@@ -49,6 +44,7 @@ func MountKeyAndReadConfig() Config {
 	jsonBytes, err := ioutil.ReadAll(jsonFile)
 	utils.Check(err, "reading json file")
 	json.Unmarshal(jsonBytes, &config)
+	utils.Log("Key is present", "key-success")
 	return config
 }
 
@@ -61,15 +57,22 @@ type Config struct {
 }
 
 // TODO: make bootstrapper depend on network connectivity to avoid startup failure?
+// TODO: make Log() only take one argument and generate string from text?
 func main() {
-	log("bootstrapper initializing", "initializing")
+	utils.Log("bootstrapper initializing", "initializing")
+	utils.Log("Checking for key", "key-checking")
 	config := MountKeyAndReadConfig()
 	utils.AddRepo(config.RepoUrl)                                                       // add repo and apt-get update
+	utils.Log("self-updating", "self-update")
 	wasUpdated := utils.UpdateOrInstallAndReboot([]string{"osprey-bootstrapper"})       // update self, reboot if changes were made
+	utils.Log("installing platform", "installing-platform")
 	wasUpdated = wasUpdated || utils.UpdateOrInstallAndReboot(config.PackagesToInstall) // install or update osprey, reboot if changes were made
 	if wasUpdated {
+		utils.Log("packages were updated, rebooting", "rebooting")
 		utils.Reboot()
 	}
+	utils.Log("Nothing needed updating", "no-updates")
+	utils.Log("Starting platform services", "starting-platform-services")
 	utils.StartServices(config.ServicesToStart)
-	log("bootstrapper exited successfully", "exited")
+	utils.Log("bootstrapper exited successfully", "finished")
 }
