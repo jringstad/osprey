@@ -7,7 +7,7 @@ StartLimitInterval=200
 StartLimitBurst=20
 
 [Service]
-Type=forking
+Type=simple
 ExecStart=/usr/local/bin/osprey-autossh
 User=pi
 Restart=always

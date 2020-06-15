@@ -42,6 +42,7 @@ func Check(e error, operationThatFailed string) {
 }
 
 func RunCommand(command string) {
+	fmt.Println(command)
 	cmd := exec.Command("bash", "-c", command)
 
 	var stdout, stderr []byte
