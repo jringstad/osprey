@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eu -o pipefail
+
+NAME=low-level-control-service
+TAG=$1
+mkdir -p osprey-$NAME-$TAG/usr/local/bin
+cp ../osprey-low-level-control-service osprey-$NAME-$TAG/usr/local/bin/
+mkdir -p osprey-$NAME-$TAG/lib/systemd/system/
+cp misc/osprey-$NAME.service osprey-$NAME-$TAG/lib/systemd/system/
+
+mkdir -p osprey-$NAME-$TAG/DEBIAN/
+cp misc/control osprey-$NAME-$TAG/DEBIAN/
+cp misc/rules osprey-$NAME-$TAG/DEBIAN/
+sed -e "s/RELEASE_TAG/$TAG/g" -i osprey-$NAME-$TAG/DEBIAN/control
+
+dpkg-deb --build osprey-$NAME-$TAG

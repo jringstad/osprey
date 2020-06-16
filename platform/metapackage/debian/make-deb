@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eu -o pipefail
+
+NAME=platform
+TAG=$1
+
+mkdir -p osprey-$NAME-$TAG/DEBIAN/
+cp misc/control osprey-$NAME-$TAG/DEBIAN/
+sed -e "s/RELEASE_TAG/$TAG/g" -i osprey-$NAME-$TAG/DEBIAN/control
+
+dpkg-deb --build osprey-$NAME-$TAG

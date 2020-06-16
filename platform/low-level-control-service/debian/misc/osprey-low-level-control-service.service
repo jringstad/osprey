@@ -1,0 +1,11 @@
+[Unit]
+Description=Osprey low-level-control-service
+StartLimitInterval=200
+StartLimitBurst=20
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/osprey-autossh
+User=pi
+Restart=always
+RestartSec=10

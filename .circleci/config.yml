@@ -32,6 +32,7 @@ jobs:
           path: /go/src/github.com/jringstad/osprey/
       - run: cd bootstrapper && GOARCH=arm GOOS=linux go build bootstrapper.go
       - run: cd autossh && GOARCH=arm GOOS=linux go build autossh.go
+      - run: cd platform/low-level-control-service && GOARCH=arm GOOS=linux go build main.go -o osprey-low-level-control-service
       - persist_to_workspace:
           root: /go/src/github.com/jringstad/
           paths:
@@ -49,3 +50,5 @@ jobs:
       - run: gem install deb-s3
       - run: cd bootstrapper/debian && deb-s3 upload osprey-bootstrapper-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
       - run: cd autossh/debian && deb-s3 upload osprey-autossh-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
+      - run: cd platform/low-level-control-service/debian && deb-s3 upload osprey-low-level-control-service-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
+      - run: cd platform/metapackage/debian && deb-s3 upload osprey-platform-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}

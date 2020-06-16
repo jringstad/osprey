@@ -1,0 +1,8 @@
+Package: osprey-platform
+Version: RELEASE_TAG
+Section: base
+Priority: optional
+Architecture: armhf
+Depends: osprey-low-level-control-service (>= RELEASE_TAG)
+Maintainer: Your Name <you@email.com>
+Description: osprey platform meta-package

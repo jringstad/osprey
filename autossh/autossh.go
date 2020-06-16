@@ -101,7 +101,7 @@ type Config struct {
 }
 
 // TODO: add autossh dependency
-// TODO: read key file from config
+// TODO: read key file from config so that we don't need a password
 // TODO: read host fingerprint from config file instead of disabling strict host key checking
 func main() {
 	config := ReadConfig()
