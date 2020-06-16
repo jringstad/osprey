@@ -101,12 +101,14 @@ type Config struct {
 }
 
 // TODO: add autossh dependency
+// TODO: read key file from config
+// TODO: read host fingerprint from config file instead of disabling strict host key checking
 func main() {
 	config := ReadConfig()
 	command := `AUTOSSH_GATETIME=0 
 AUTOSSH_POLL=20 \
 AUTOSSH_PORT=0 \
-autossh -M 0 -o "ServerAliveInterval 5" -o "ServerAliveCountMax 3" \
+autossh -M 0 -o "ServerAliveInterval 5" -o "ServerAliveCountMax 3" -o StrictHostKeyChecking=no \
 %s@%s -N -R 8090:localhost:22 -vv \
 -i /mnt/osprey-key/groundstation-cert.pem`
 	RunCommand(fmt.Sprintf(command, config.GroundstationUser, config.Groundstation))
