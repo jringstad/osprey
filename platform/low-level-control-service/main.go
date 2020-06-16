@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("LLCS starting")
+	fmt.Println("LLCS starting...")
 }
