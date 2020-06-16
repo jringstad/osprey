@@ -32,7 +32,7 @@ jobs:
           path: /go/src/github.com/jringstad/osprey/
       - run: cd bootstrapper && GOARCH=arm GOOS=linux go build bootstrapper.go
       - run: cd autossh && GOARCH=arm GOOS=linux go build autossh.go
-      - run: cd platform/low-level-control-service && GOARCH=arm GOOS=linux go build main.go -o osprey-low-level-control-service
+      - run: cd platform/low-level-control-service && GOARCH=arm GOOS=linux go build -o osprey-low-level-control-service main.go
       - persist_to_workspace:
           root: /go/src/github.com/jringstad/
           paths:
