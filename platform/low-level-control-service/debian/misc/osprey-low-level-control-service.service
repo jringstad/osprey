@@ -5,7 +5,7 @@ StartLimitBurst=20
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/osprey-autossh
+ExecStart=/usr/local/bin/osprey-low-level-control-service
 User=pi
 Restart=always
 RestartSec=10
