@@ -11,4 +11,4 @@ cp misc/control osprey-diagnostics-$TAG/DEBIAN/
 cp misc/osprey-diagnostics.service osprey-diagnostics-$TAG/DEBIAN/
 cp misc/osprey-diagnostics.timer osprey-diagnostics-$TAG/DEBIAN/
 
-dpkg-deb --build osprey-diagnostics-$TAG
+dpkg --build osprey-diagnostics-$TAG
