@@ -47,6 +47,8 @@ jobs:
           at: /tmp/workspace
       - run: cd bootstrapper/debian && bash -x make-deb $CIRCLE_TAG
       - run: cd autossh/debian && bash -x make-deb $CIRCLE_TAG
+      - run: cd platform/low-level-control-service/debian && bash -x make-deb $CIRCLE_TAG
+      - run: cd platform/metapackage/debian && bash -x make-deb $CIRCLE_TAG
       - run: gem install deb-s3
       - run: cd bootstrapper/debian && deb-s3 upload osprey-bootstrapper-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
       - run: cd autossh/debian && deb-s3 upload osprey-autossh-$CIRCLE_TAG.deb --bucket osprey-groundstation --preserve-versions --s3-region=${AWS_REGION}
