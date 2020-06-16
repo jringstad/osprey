@@ -40,7 +40,7 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/ruby:2.4.2-jessie-node
+      - image: ruby:2.4.2-jessie-slim
     working_directory: /tmp/workspace/osprey/
     steps:
       - attach_workspace:
