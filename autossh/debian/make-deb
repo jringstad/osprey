@@ -13,4 +13,4 @@ cp misc/control osprey-autossh-$TAG/DEBIAN/
 cp misc/rules osprey-autossh-$TAG/DEBIAN/
 sed -e "s/RELEASE_TAG/$TAG/" -i osprey-autossh-$TAG/DEBIAN/control
 
-dpkg-deb --build osprey-autossh-$TAG
+dpkg --build osprey-autossh-$TAG

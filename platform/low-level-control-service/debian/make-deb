@@ -13,4 +13,4 @@ cp misc/control osprey-$NAME-$TAG/DEBIAN/
 cp misc/rules osprey-$NAME-$TAG/DEBIAN/
 sed -e "s/RELEASE_TAG/$TAG/g" -i osprey-$NAME-$TAG/DEBIAN/control
 
-dpkg-deb --build osprey-$NAME-$TAG
+dpkg --build osprey-$NAME-$TAG
