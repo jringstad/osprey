@@ -15,4 +15,4 @@ cp misc/control osprey-bootstrapper-$TAG/DEBIAN/
 cp misc/rules osprey-bootstrapper-$TAG/DEBIAN/
 sed -e "s/RELEASE_TAG/$TAG/" -i osprey-bootstrapper-$TAG/DEBIAN/control
 
-dpkg-deb --build osprey-bootstrapper-$TAG
+dpkg --build osprey-bootstrapper-$TAG
